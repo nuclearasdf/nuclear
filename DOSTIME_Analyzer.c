@@ -70,3 +70,75 @@ int main()
 	return 0;
 
 }
+
+int input_string(char * s)
+{
+	char *t = 0;
+	int size = 0;
+	int len;
+	do
+	{
+		s[LENGTH-2] = 0;
+		fgets(s, LENGTH, stdin);
+		len = strlen(s);
+		size += len;
+		t = realloc(t, size);
+		strcat(t, s);
+	} while(len == LENGTH-1 && s[LENGTH-2] != '\n');
+	return len-1;
+}
+
+
+
+int isLittleEndian()
+{
+   unsigned num = 0xABCD; 
+   return (*((unsigned char*)&num) == 0xCD);
+}
+
+
+
+int unix2dostime (int year, int month, int day, int hour, int min, int sec)
+{
+  return ((year-1980) << 25
+	  | (month) << 21
+	  | day << 16
+	  | hour << 11
+	  | min << 5
+	  | sec >> 1);
+}
+
+
+
+int LittleEndian_to_BigEndian(int num)
+{
+	return ((num>>24)&0xff) | // move byte 3 to byte 0
+           ((num<<8)&0xff0000) | // move byte 1 to byte 2
+           ((num>>8)&0xff00) | // move byte 2 to byte 1
+           ((num<<24)&0xff000000); // byte 0 to byte 3
+}
+
+unsigned int extract_hex(const char *src)
+{
+	int errno;
+    char hex_low[4 + 1] = { 0 };
+    char hex_high[4 + 1] = { 0 };
+    unsigned int val;
+	unsigned long val2;
+
+    if (strlen(src) < 8)
+        return -1;
+
+    memcpy(hex_low, src+4, 4);
+    memcpy(hex_high, src, 4);
+
+    if (strspn(hex_low,"0123456789AaBbCcDdEeFf") < 4)
+        return -1;
+    if (strspn(hex_high,"0123456789AaBbCcDdEeFf") < 4)
+        return -1;
+
+    val = strtol(hex_high, NULL, 16) << 16;
+    val += strtol(hex_low, NULL, 16);
+
+	return val;
+}
