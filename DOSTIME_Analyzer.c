@@ -29,6 +29,14 @@
 
 #define LENGTH 250
 
+void dumpcode(unsigned char *buff, int len);
+void printchar(unsigned char c);
+int unix2dostime (int year, int month, int day, int hour, int min, int sec);
+int isLittleEndian();
+void dos2unixtime(int dostime);
+int LittleEndian_to_BigEndian(int num);
+unsigned int extract_hex(const char *src);
+
 
 int main()
 {
