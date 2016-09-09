@@ -97,6 +97,26 @@ int isLittleEndian()
 }
 
 
+void dos2unixtime(int dostime)
+/* DOS time to convert *//* Return the Unix time_t value (GMT/UTC time) for the DOS format (local) * time dostime, where dostime is a four byte value (date in most significant * word, time in least significant word), see dostime() function. */
+{  
+	int year;
+	int month;
+	int day;
+	int hour;
+	int min;
+	int sec;
+	int result;
+	sec    = (((int)dostime) <<  1) & 0x3e;  
+	min    = (((int)dostime) >>  5) & 0x3f;  
+	hour   = (((int)dostime) >> 11) & 0x1f;  
+	day    = (int)(dostime >> 16) & 0x1f;  
+	month  = ((int)(dostime >> 21) & 0x0f);  
+	year   = ((int)(dostime >> 25) & 0x7f) + 1980;  
+	printf("%d Y %d M %d D, %d H, %d M, %d sec \n",year, month, day, hour, min, sec);
+	result = unix2dostime (year, month, day, hour, min, sec);
+	printf("Function input: %d, Function_output: %d \n", dostime, result);
+}
 
 int unix2dostime (int year, int month, int day, int hour, int min, int sec)
 {
